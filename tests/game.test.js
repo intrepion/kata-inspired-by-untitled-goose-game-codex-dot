@@ -16,3 +16,19 @@ const corner=game.nextWaypoint(s.farmer,s.goose);assert.ok(corner && corner!==s.
 s.farmer.state='chase';s.farmer.notice=.2;tick(s,.4);assert.notEqual(s.farmer.state,'chase','chase ends after losing sight');
 s=game.create();s.goose.x=4.8;s.goose.y=2.3;for(let i=0;i<12;i++)game.update(s,.05,{x:0,y:1});assert.ok(s.goose.y>3.15,'goose can slip through hedge');
 console.log('Hedge cover, sight loss and caretaker routing passed');
+
+// A loose object may be bumped, but must not move with the goose as if held.
+for(const run of [false,true]){
+ s=game.create();s.farmer.x=9;s.farmer.y=1;s.goose.x=3;s.goose.y=3;s.items.ribbon.x=3.5;s.items.ribbon.y=3;
+ tick(s,1,{x:1,y:0,run});const bumped=s.items.ribbon.x;
+ assert.ok(bumped>3.5&&bumped<=3.78+1e-9,'contact gives a small nudge');
+ assert.equal(s.goose.carrying,null);assert.equal(s.items.ribbon.carried,false);
+ assert.ok(s.goose.x>bumped+.48,'goose passes a loose item without dragging it');
+ tick(s,.5,{x:1,y:0,run});assert.equal(s.items.ribbon.x,bumped,'loose item stays put after separation');
+}
+s=game.create();s.farmer.x=9;s.farmer.y=1;s.goose.x=3;s.goose.y=3;s.items.ribbon.x=2.8;s.items.ribbon.y=3;
+tick(s,.1,{x:1,y:0});assert.equal(s.items.ribbon.x,2.8,'moving away does not pull a loose item');
+s=game.create();s.farmer.x=9;s.farmer.y=1;s.goose.x=3;s.goose.y=3;s.items.ribbon.x=3.5;s.items.ribbon.y=3;
+assert.equal(game.interact(s),'pick');tick(s,.4,{x:1,y:0});assert.equal(s.items.ribbon.carried,true);assert.ok(Math.abs(s.items.ribbon.x-s.goose.x-.4)<1e-9,'only an explicitly picked-up item follows');
+assert.equal(game.interact(s),'drop');const dropped=s.items.ribbon.x;tick(s,.4,{x:-1,y:0});assert.equal(s.items.ribbon.x,dropped,'a dropped object remains behind when walking away');
+console.log('Loose-object nudge, separation, pickup and drop regressions passed');
