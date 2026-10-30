@@ -23,6 +23,8 @@ export function createScene(canvas) {
     ball(.5,.48,.5,'#80b879',x-.35,1.48,z+.2);
   }
   for (const r of Orchard.cover) { const x=(r.x1+r.x2)/2,z=(r.y1+r.y2)/2; box(r.x2-r.x1,.55,r.y2-r.y1,'#4f8959',x,.28,z); }
+  const visionGeometry=new THREE.BufferGeometry();visionGeometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(180*9),3));
+  const vision=new THREE.Mesh(visionGeometry,new THREE.MeshBasicMaterial({color:'#ffec97',transparent:true,opacity:.30,depthWrite:false,side:THREE.DoubleSide}));vision.frustumCulled=false;scene.add(vision);
   const goose = new THREE.Group(); scene.add(goose);
   ball(.48,.3,.32,'#faf8e9',0,.4,0,goose);
   box(.13,.48,.13,'#faf8e9',.32,.7,0,goose);
@@ -34,6 +36,10 @@ export function createScene(canvas) {
   ball(.22,.24,.2,'#d7aa87',0,1.17,0,farmer);
   box(.55,.09,.45,'#ab7953',0,1.37,0,farmer);
   for (const x of [-.13,.13]) box(.12,.4,.14,'#604d43',x,.2,0,farmer);
+  // A raised arrow remains readable as the camera turns; its orientation is world-relative.
+  const arrow = new THREE.Group(); farmer.add(arrow);arrow.position.y=1.75;
+  box(.45,.07,.08,'#fff9d8',.28,0,0,arrow);
+  const arrowTip=mesh(new THREE.ConeGeometry(.17,.32,3),'#fff9d8',.59,0,0,arrow);arrowTip.rotation.z=-Math.PI/2;
   const items = {};
   items.basket = box(.45,.25,.35,'#af7442',0,.15,0);
   items.pear = ball(.17,.22,.17,'#d9c753',0,.22,0);
@@ -45,9 +51,11 @@ export function createScene(canvas) {
   function rotate(delta) { angle += delta * Math.PI/2; }
   function draw(state) {
     camera.position.set(5+Math.sin(angle)*15,14,5+Math.cos(angle)*15);camera.lookAt(5,0,5);camera.updateProjectionMatrix();
+    const polygon=Orchard.visionPolygon(state.farmer),positions=visionGeometry.attributes.position;for(let i=0;i<polygon.length;i++){const a=polygon[i],b=polygon[(i+1)%polygon.length],base=i*3;positions.setXYZ(base,state.farmer.x,.025,state.farmer.y);positions.setXYZ(base+1,a.x,.025,a.y);positions.setXYZ(base+2,b.x,.025,b.y);}positions.needsUpdate=true;visionGeometry.setDrawRange(0,polygon.length*3);
     goose.position.set(state.goose.x,0,state.goose.y);
     goose.rotation.y = -Math.atan2(state.goose.dy,state.goose.dx);
     farmer.position.set(state.farmer.x,0,state.farmer.y);
+    farmer.rotation.y=-Math.atan2(state.farmer.dy,state.farmer.dx);
     for (const [id,obj] of Object.entries(items)) { const item=state.items[id];obj.position.set(item.x,item.carried?.75:(id==='pear'?.22:id==='basket'?.15:.08),item.y); }
     water.visible=state.tap.on;
     renderer.render(scene,camera);
