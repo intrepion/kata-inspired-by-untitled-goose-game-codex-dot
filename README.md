@@ -1,14 +1,20 @@
 # Puddle Trouble
 
-A small, original browser game about a mischievous bird, a watchful gardener, and a very inconvenient pond. Inspired by the playful spirit of *Untitled Goose Game*; this project is independent and uses no assets from that game.
+An original little real-time orchard sandbox about a mischievous goose and a caretaker trying to get on with her work. Inspired by the playful stealth and reactive world of *Untitled Goose Game*, independently made with original code and drawn artwork; it is not affiliated with House House or Panic.
 
-## Play
+[Play online](https://intrepion.github.io/kata-inspired-by-untitled-goose-game-codex-dot/) (the published version may differ from local changes).
 
-[Play online](https://intrepion.github.io/kata-inspired-by-untitled-goose-game-codex-dot/)
+## Play locally
 
-Open `index.html` in a modern browser, or serve this directory with `python3 -m http.server` and visit `http://localhost:8000`. No installation or build is required.
+Open `index.html` in a modern browser, or run `python3 -m http.server` in this directory and visit `http://localhost:8000`. No build or installation is needed.
 
-Move with arrow keys or WASD. Press Space to pick up or drop an item on your square, and H to honk. On touch screens use the on-screen controls. Honking attracts the gardener, who can put unattended items back. Drop the apple and hat in the pond and honk near the gardener to complete the list. Start over whenever you like.
+Move with arrows or WASD, hold Shift to run, press Space to pick up or drop nearby objects or operate the tap, and press H to honk. On a touch screen, hold the direction and run buttons; tap the action and honk buttons. The controls remain available with keyboard navigation. The game pauses when its browser tab is hidden.
+
+Bring the basket and pear to the straw nest and drop them, honk near the caretaker, and turn on the tap. The caretaker patrols, investigates sounds, pursues a nearby thief, and returns displaced objects or shuts off the tap. Loose objects can also be nudged by walking into them. The ribbon is an extra toy. There is no timer or loss condition; the orchard remains open after the list is complete.
+
+## Test
+
+Run `node tests/game.test.js` and `node tests/controls.test.js` to check movement, caretaker reactions, goals, and keyboard and touch control wiring.
 
 ## License
 
