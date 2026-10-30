@@ -30,11 +30,11 @@ export function createScene(canvas) {
   box(.13,.48,.13,'#faf8e9',.32,.7,0,goose);
   ball(.18,.16,.16,'#faf8e9',.36,.96,0,goose);
   box(.22,.08,.12,'#dc9c4b',.55,.95,0,goose);
-  for (const z of [-.17,.17]) box(.1,.16,.1,'#d59849',-.12,.1,z,goose);
+  const feet=[-.17,.17].map(z=>box(.1,.16,.1,'#d59849',-.12,.1,z,goose));
   const farmer = new THREE.Group(); scene.add(farmer);
   box(.38,.65,.25,'#688d9b',0,.72,0,farmer);
   ball(.22,.24,.2,'#d7aa87',0,1.17,0,farmer);
-  box(.55,.09,.45,'#ab7953',0,1.37,0,farmer);
+  const wornHat=box(.55,.09,.45,'#ab7953',0,1.37,0,farmer);
   for (const x of [-.13,.13]) box(.12,.4,.14,'#604d43',x,.2,0,farmer);
   // A raised arrow remains readable as the camera turns; its orientation is world-relative.
   const arrow = new THREE.Group(); farmer.add(arrow);arrow.position.y=1.75;
@@ -44,6 +44,7 @@ export function createScene(canvas) {
   items.basket = box(.45,.25,.35,'#af7442',0,.15,0);
   items.pear = ball(.17,.22,.17,'#d9c753',0,.22,0);
   items.ribbon = box(.5,.09,.13,'#d96b75',0,.08,0);
+  items.hat = box(.48,.12,.35,'#ab7953',0,.08,0);
   const tap = new THREE.Group(); scene.add(tap); tap.position.set(8.6,0,2);
   box(.13,.8,.13,'#638e8e',0,.4,0,tap); box(.38,.13,.13,'#638e8e',.15,.8,0,tap);
   const water = box(.08,.48,.08,'#84c9d0',.31,.52,0,tap);
@@ -55,8 +56,9 @@ export function createScene(canvas) {
     goose.position.set(state.goose.x,0,state.goose.y);
     goose.rotation.y = -Math.atan2(state.goose.dy,state.goose.dx);
     farmer.position.set(state.farmer.x,0,state.farmer.y);
-    farmer.rotation.y=-Math.atan2(state.farmer.dy,state.farmer.dx);
-    for (const [id,obj] of Object.entries(items)) { const item=state.items[id];obj.position.set(item.x,item.carried?.75:(id==='pear'?.22:id==='basket'?.15:.08),item.y); }
+    farmer.rotation.y=-Math.atan2(state.farmer.dy,state.farmer.dx);wornHat.visible=state.farmer.wearingHat;
+    feet.forEach((foot,i)=>{foot.position.x=-.12+(state.goose.running?Math.sin(performance.now()/65+i*Math.PI)*.12:0);});
+    for (const [id,obj] of Object.entries(items)) { const item=state.items[id];obj.visible=!(id==='hat'&&state.farmer.wearingHat);obj.position.set(item.x,item.tied?.55:item.carried?.75:(id==='pear'?.22:id==='basket'?.15:.08),item.y); }
     water.visible=state.tap.on;
     renderer.render(scene,camera);
   }
