@@ -19,3 +19,7 @@ Run `node tests/game.test.js` and `node tests/controls.test.js` to check movemen
 ## License
 
 MIT; see [LICENSE](LICENSE). The root `.gitignore` combines GitHub's global Linux, macOS, and Windows templates.
+
+The experimental `?view=three` orchard uses a Three.js orthographic view when WebGL is available. The original view remains the default pending browser playtesting. Press Q or E to rotate the camera by a quarter turn; movement remains relative to the screen. The original canvas view is retained as a fallback if WebGL or module loading is unavailable. Three.js 0.180.0 is bundled under its MIT license in `vendor/three`.
+
+The experimental view does not yet reproduce every original caretaker and object cue. Use the default view for the established presentation.
