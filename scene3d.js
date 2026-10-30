@@ -22,6 +22,7 @@ export function createScene(canvas) {
     ball(.72,.65,.72,'#5b935f',x,1.45,z);
     ball(.5,.48,.5,'#80b879',x-.35,1.48,z+.2);
   }
+  for (const r of Orchard.cover) { const x=(r.x1+r.x2)/2,z=(r.y1+r.y2)/2; box(r.x2-r.x1,.55,r.y2-r.y1,'#4f8959',x,.28,z); }
   const goose = new THREE.Group(); scene.add(goose);
   ball(.48,.3,.32,'#faf8e9',0,.4,0,goose);
   box(.13,.48,.13,'#faf8e9',.32,.7,0,goose);

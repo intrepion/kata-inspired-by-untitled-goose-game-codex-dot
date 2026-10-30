@@ -23,3 +23,5 @@ MIT; see [LICENSE](LICENSE). The root `.gitignore` combines GitHub's global Linu
 The experimental `?view=three` orchard uses a Three.js orthographic view when WebGL is available. The original view remains the default pending browser playtesting. Press Q or E to rotate the camera by a quarter turn; movement remains relative to the screen. The original canvas view is retained as a fallback if WebGL or module loading is unavailable. Three.js 0.180.0 is bundled under its MIT license in `vendor/three`.
 
 The experimental view does not yet reproduce every original caretaker and object cue. Use the default view for the established presentation.
+
+Low green hedges block the caretaker's view and force her to go around, but the goose can slip through. Breaking sight for a moment ends a chase; honking can still be heard through cover. The status line reports when a hedge blocks her view.

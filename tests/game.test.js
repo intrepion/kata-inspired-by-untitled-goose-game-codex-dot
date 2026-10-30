@@ -8,3 +8,11 @@ s=game.create();s.farmer.x=5.5;s.farmer.y=3;s.goose.x=s.items.basket.x;s.goose.y
 s=game.create();s.goose.x=s.tap.x;s.goose.y=s.tap.y;assert.equal(game.interact(s),'tap');assert.equal(s.tap.on,true);tick(s,5);assert.equal(s.tap.on,false,'caretaker turns tap off');assert.equal(s.goals.tap,true);
 s=game.create();for(const id of ['basket','pear']){s.goose.x=s.items[id].x;s.goose.y=s.items[id].y;assert.equal(game.interact(s),'pick');s.goose.x=s.nest.x;s.goose.y=s.nest.y;s.goose.dx=1;s.goose.dy=0;assert.equal(game.interact(s),'drop');assert.equal(s.goals[id],true)}s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.interact(s);s.goose.x=s.farmer.x-1;s.goose.y=s.farmer.y;game.honk(s);tick(s,.05);assert.equal(s.completed,true,'all goals complete');
 console.log('Continuous movement, run, honk, caretaker investigation/chase/return, tap and goals passed');
+
+// Hedges are transparent to goose movement, opaque to sight, and route the caretaker around them.
+s=game.create();s.farmer.x=4.8;s.farmer.y=2;s.goose.x=4.8;s.goose.y=3.65;s.goose.carrying='basket';s.items.basket.carried=true;
+assert.equal(game.visible(s.farmer,s.goose),false);tick(s,.1);assert.notEqual(s.farmer.state,'chase','covered theft is not seen');
+const corner=game.nextWaypoint(s.farmer,s.goose);assert.ok(corner && corner!==s.goose,'caretaker routes around hedge');assert.ok(game.visible(s.farmer,corner));
+s.farmer.state='chase';s.farmer.notice=.2;tick(s,.4);assert.notEqual(s.farmer.state,'chase','chase ends after losing sight');
+s=game.create();s.goose.x=4.8;s.goose.y=2.3;for(let i=0;i<12;i++)game.update(s,.05,{x:0,y:1});assert.ok(s.goose.y>3.15,'goose can slip through hedge');
+console.log('Hedge cover, sight loss and caretaker routing passed');
