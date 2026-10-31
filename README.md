@@ -10,7 +10,7 @@ Open `index.html` in a modern browser, or run `python3 -m http.server` in this d
 
 Move with arrows or WASD, hold Shift to run (4.2 versus 2.35 orchard units per second), press Space to pick up or drop nearby objects or operate the tap, and press H to honk. On a touch screen, hold the direction and run buttons; tap the action and honk buttons. The controls remain available with keyboard navigation. The game pauses when its browser tab is hidden.
 
-Bring the basket and the caretaker’s hat to the straw nest and drop them, honk near the caretaker to knock her hat off, and turn on the tap. Carry the ribbon to the tap and use it there to tie it on and start the water; she must untie it, turn off the tap and return the ribbon. The caretaker patrols, investigates sounds, pursues a nearby thief, and returns displaced objects or shuts off the tap. Loose objects can also be nudged by walking into them. The ribbon is an extra toy. There is no timer or loss condition; the orchard remains open after the list is complete.
+Bring the basket and the caretaker’s hat to the straw nest and drop them, honk near the caretaker to knock her hat off, and turn on the tap. Press Space near the tap to operate it, even while holding another object. The caretaker immediately runs to the running tap. Carry the ribbon to the tap and use it there to tie it on and start the water; she must untie it, turn off the tap and return the ribbon. The caretaker patrols, investigates sounds, pursues a nearby thief, and returns displaced objects or shuts off the tap. Loose objects can also be nudged by walking into them. The ribbon is an extra toy. There is no timer or loss condition; the orchard remains open after the list is complete.
 
 ## Test
 

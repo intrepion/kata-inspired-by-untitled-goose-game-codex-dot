@@ -35,7 +35,7 @@ export function createScene(canvas) {
   box(.38,.65,.25,'#688d9b',0,.72,0,farmer);
   ball(.22,.24,.2,'#d7aa87',0,1.17,0,farmer);
   const wornHat=box(.55,.09,.45,'#ab7953',0,1.37,0,farmer);
-  for (const x of [-.13,.13]) box(.12,.4,.14,'#604d43',x,.2,0,farmer);
+  const farmerFeet=[-.13,.13].map(x=>box(.12,.4,.14,'#604d43',x,.2,0,farmer));
   // A raised arrow remains readable as the camera turns; its orientation is world-relative.
   const arrow = new THREE.Group(); farmer.add(arrow);arrow.position.y=1.75;
   box(.45,.07,.08,'#fff9d8',.28,0,0,arrow);
@@ -57,6 +57,7 @@ export function createScene(canvas) {
     goose.rotation.y = -Math.atan2(state.goose.dy,state.goose.dx);
     farmer.position.set(state.farmer.x,0,state.farmer.y);
     farmer.rotation.y=-Math.atan2(state.farmer.dy,state.farmer.dx);wornHat.visible=state.farmer.wearingHat;
+    farmerFeet.forEach((foot,i)=>{foot.position.x=(i? .13:-.13)+(state.farmer.state==='tap'?Math.sin(performance.now()/65+i*Math.PI)*.1:0);});
     feet.forEach((foot,i)=>{foot.position.x=-.12+(state.goose.running?Math.sin(performance.now()/65+i*Math.PI)*.12:0);});
     for (const [id,obj] of Object.entries(items)) { const item=state.items[id];obj.visible=!(id==='hat'&&state.farmer.wearingHat);obj.position.set(item.x,item.tied?.55:item.carried?.75:(id==='pear'?.22:id==='basket'?.15:.08),item.y); }
     water.visible=state.tap.on;

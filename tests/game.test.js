@@ -73,11 +73,28 @@ s=game.create();s.goose.x=s.items.ribbon.x;s.goose.y=s.items.ribbon.y;game.inter
 // A honk after untying drops the ribbon rather than leaving it permanently held.
 s=game.create();s.goose.x=s.items.ribbon.x;s.goose.y=s.items.ribbon.y;game.interact(s);s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.interact(s);s.farmer.x=s.tap.x;s.farmer.y=s.tap.y;s.farmer.state='tap';tick(s,2.4);assert.equal(s.farmer.state,'turnoff');assert.equal(s.items.ribbon.heldByFarmer,true);game.honk(s);assert.equal(s.items.ribbon.heldByFarmer,false);assert.equal(s.tap.on,true);s.goose.x=1;s.goose.y=1;tick(s,15);assert.equal(s.tap.on,false);assert.ok(game.distance(s.items.ribbon,s.items.ribbon.home)<.1);
 console.log('Run speed, hat objective, ribbon-tap sequence and interruptions passed');
-// A hat knocked off at the tap remains retrievable instead of the tap taking priority.
-s=game.create();s.farmer.x=s.tap.x;s.farmer.y=s.tap.y;s.farmer.dx=-1;s.farmer.dy=0;s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.honk(s);s.goose.x=s.items.hat.x;s.goose.y=s.items.hat.y;assert.equal(game.hint(s),'Pick up hat');assert.equal(game.interact(s),'pick');assert.equal(s.goose.carrying,'hat');
+// The tap takes priority nearby; the hat remains retrievable from outside tap reach.
+s=game.create();s.farmer.x=s.tap.x;s.farmer.y=s.tap.y;s.farmer.dx=-1;s.farmer.dy=0;s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.honk(s);s.goose.x=s.items.hat.x;s.goose.y=s.items.hat.y;assert.equal(game.hint(s),'Turn tap on');assert.equal(game.interact(s),'tap');s.goose.x=s.tap.x-1.05;s.goose.y=s.tap.y;assert.equal(game.hint(s),'Pick up hat');assert.equal(game.interact(s),'pick');assert.equal(s.goose.carrying,'hat');
 // The goose can untie the ribbon itself, leaving the water on and the ribbon recoverable.
 s=game.create();s.goose.x=s.items.ribbon.x;s.goose.y=s.items.ribbon.y;game.interact(s);s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.interact(s);assert.equal(game.interact(s),'untie');assert.equal(s.items.ribbon.tied,false);assert.equal(s.tap.on,true);assert.equal(s.goose.carrying,null);
 // The caretaker can recover a loose hat and another honk can knock it off again.
 s=game.create();s.goose.x=s.farmer.x;s.goose.y=s.farmer.y;game.honk(s);s.goose.x=1;s.goose.y=1;s.farmer.state='restore';s.farmer.target='hat';tick(s,2);assert.equal(s.farmer.wearingHat,true);s.goose.x=s.farmer.x;s.goose.y=s.farmer.y;assert.equal(game.honk(s),true);assert.equal(s.farmer.wearingHat,false);
 // Interrupting a return releases other objects too, so they remain retrievable.
 s=game.create();s.farmer.x=6;s.farmer.y=3;s.farmer.state='return';s.farmer.target='basket';s.items.basket.heldByFarmer=true;s.goose.x=6;s.goose.y=3;game.honk(s);assert.equal(s.items.basket.heldByFarmer,false);assert.equal(s.farmer.state,'investigate');
+
+// Tap activation takes priority and dispatches the caretaker from anywhere immediately.
+for(const held of [null,'basket','pear','hat']){
+ s=game.create();s.farmer.x=7;s.farmer.y=2;s.farmer.state='investigate';s.farmer.target={x:2,y:2};s.goose.x=s.tap.x;s.goose.y=s.tap.y;
+ if(held){s.goose.carrying=held;s.items[held].carried=true;if(held==='hat')s.farmer.wearingHat=false;}
+ assert.equal(game.hint(s),'Turn tap on');assert.equal(game.interact(s),'tap');assert.equal(s.tap.on,true);assert.equal(s.farmer.state,'tap');assert.equal(s.goose.carrying,held,'the carried object remains held');
+ const startX=s.farmer.x;tick(s,.05);assert.ok(Math.abs(s.farmer.x-startX-game.TAP_RUN_SPEED*.05)<1e-8,'caretaker starts running on first update');assert.equal(s.farmer.state,'tap');
+}
+assert.ok(game.TAP_RUN_SPEED>1.05,'tap response is faster than routine walking');
+// A tap alarm interrupts returns without losing the item, including at long distance.
+s=game.create();s.farmer.x=1;s.farmer.y=1;s.farmer.state='return';s.farmer.target='basket';s.items.basket.heldByFarmer=true;s.goose.x=s.tap.x;s.goose.y=s.tap.y;game.interact(s);assert.equal(s.farmer.state,'tap');assert.equal(s.items.basket.heldByFarmer,false);assert.equal(s.items.basket.x,1);assert.equal(s.items.basket.y,1);
+// Turning water off while en route ends the response; a new activation restarts it.
+assert.equal(game.interact(s),'tap');assert.equal(s.tap.on,false);tick(s,.05);assert.equal(s.farmer.state,'working');assert.equal(game.interact(s),'tap');assert.equal(s.farmer.state,'tap');
+// Tying the ribbon triggers the same immediate response, and a honk only delays it.
+s=game.create();s.goose.x=s.items.ribbon.x;s.goose.y=s.items.ribbon.y;game.interact(s);s.goose.x=s.tap.x;s.goose.y=s.tap.y;s.farmer.x=1;s.farmer.y=1;assert.equal(game.interact(s),'tie');assert.equal(s.farmer.state,'tap');assert.equal(s.items.ribbon.tied,true);
+s.farmer.x=7;s.farmer.y=2;s.goose.x=7;s.goose.y=2;game.honk(s);assert.equal(s.farmer.state,'investigate');s.goose.x=1;s.goose.y=1;tick(s,8);assert.equal(s.tap.on,false);assert.equal(s.items.ribbon.tied,false);tick(s,7);assert.ok(game.distance(s.items.ribbon,s.items.ribbon.home)<.1);
+console.log('Immediate tap response, running speed, tap priority and interruption recovery passed');
