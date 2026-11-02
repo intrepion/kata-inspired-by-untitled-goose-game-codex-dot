@@ -27,3 +27,7 @@ The experimental view does not yet reproduce every original caretaker and object
 Low green hedges block the caretaker's view and force her to go around, but the goose can slip through. Breaking sight eventually ends a chase; honking can still be heard through cover. The status line reports when a hedge blocks her view.
 
 The arrow shows the caretaker’s facing, and the pale ground area shows her sight: a 110° forward field out to 2.7 orchard units, plus a 0.7-unit close-awareness circle. Hedges block both. A carried object must remain visible for 0.6 seconds before a chase begins; once chasing, she searches briefly after losing sight. Honks can be heard through hedges.
+
+## Arcade metadata
+
+See [docs/arcade-metadata.md](docs/arcade-metadata.md) for the game-owned manifest and screenshot provenance.
