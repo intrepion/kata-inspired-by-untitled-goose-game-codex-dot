@@ -4,45 +4,45 @@
   "playUrl": "https://intrepion.github.io/kata-inspired-by-untitled-goose-game-codex-dot/",
   "screenshots": [
     {
-      "path": "arcade/screenshots/ci-20261102-01.jpg",
-      "sha256": "8bca167c2eca1755bc7dbb3af6e4d94f4a79bfdb7fce0531b3a9bc0c17b80be9",
-      "alt": "Puddle Trouble gameplay, view 1",
+      "path": "arcade/screenshots/review-20261103-01.jpg",
+      "sha256": "626f985a1c3d653ffbe04ef02efd702e90fef084efed97059d307cc9afbb749e",
+      "alt": "Puddle Trouble gameplay after the mechanics update, view 1",
       "provenance": {
         "kind": "ci_gameplay_capture",
-        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
-        "sourceSha256": "a3b4a0933b1d7a2b1d9c48e1a01f1a97ef74d44bbcf8af6ba70d890e14833fd0",
-        "captureCommit": "ee763e4b22eb5423ecb5cdaaea93227df732af4f",
-        "workflowRunId": "41381121740",
+        "sourcePath": "arcade/capture-evidence/review-20261103-01.png",
+        "sourceSha256": "dd93667c6dd0a274b5753507fe3c9c13f017b27eb86438b44a7e833e59cd552b",
+        "captureCommit": "3da7a8b41fceccb64e9e3d7576f54cc05a7571cb",
+        "workflowRunId": "41675602155",
         "inputHashes": {
           "index.html": "28f0922bbac57e8f287499119c0511b9ddb178916572a5995a5f7f42d38096ad",
           "style.css": "d0fe73f97b5a9a0e6ad00859d18de6296b1acc3b54d1603fd94909cb512cd698",
-          "engine.js": "3a35945d839840e1f92bb4b729635a4b175e60920cb88a774a7c8773d2e93cdf",
+          "engine.js": "593602d69e7437276d02d69555d9a0a821e29c9fb74e44fd8e9485e684af922b",
           "game.js": "fb264f0bc3e0dc023ac613fe598b55e8eb312945f52ba81876eef6b8fcb19bb9"
         },
-        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
-        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
-        "captureRecordSha256": "1456eb16e0a97eb1ba5f844ba9e1dbc7af98862213b95e5815776d558facaa6d"
+        "publishedFilesVerifiedAt": "2026-11-03T16:39:44Z",
+        "captureRecordPath": "arcade/capture-evidence/review-20261103-record.json",
+        "captureRecordSha256": "191755d9a677cf083d786c973746ead92a8e40be24ca00939885bdb5282233a0"
       }
     },
     {
-      "path": "arcade/screenshots/ci-20261102-02.jpg",
-      "sha256": "c451cebc8e61eaa390a2c14188d2b246db481e013ad7ba067589c0ec01b9dce8",
-      "alt": "Puddle Trouble gameplay, view 2",
+      "path": "arcade/screenshots/review-20261103-02.jpg",
+      "sha256": "63970002b31280442bc06faaf241146014199a7d0e561aef64d9824dd9be73d2",
+      "alt": "Puddle Trouble gameplay after the mechanics update, view 2",
       "provenance": {
         "kind": "ci_gameplay_capture",
-        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
-        "sourceSha256": "a20a391847ca58551f271dad71168f32e66749f959121f8b153874b31777eea5",
-        "captureCommit": "ee763e4b22eb5423ecb5cdaaea93227df732af4f",
-        "workflowRunId": "41381121740",
+        "sourcePath": "arcade/capture-evidence/review-20261103-02.png",
+        "sourceSha256": "1ad0f7a08633eb43072744a63393ff40fefaf6426bcf9f45d090e324790d8ca5",
+        "captureCommit": "3da7a8b41fceccb64e9e3d7576f54cc05a7571cb",
+        "workflowRunId": "41675602155",
         "inputHashes": {
           "index.html": "28f0922bbac57e8f287499119c0511b9ddb178916572a5995a5f7f42d38096ad",
           "style.css": "d0fe73f97b5a9a0e6ad00859d18de6296b1acc3b54d1603fd94909cb512cd698",
-          "engine.js": "3a35945d839840e1f92bb4b729635a4b175e60920cb88a774a7c8773d2e93cdf",
+          "engine.js": "593602d69e7437276d02d69555d9a0a821e29c9fb74e44fd8e9485e684af922b",
           "game.js": "fb264f0bc3e0dc023ac613fe598b55e8eb312945f52ba81876eef6b8fcb19bb9"
         },
-        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
-        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
-        "captureRecordSha256": "1456eb16e0a97eb1ba5f844ba9e1dbc7af98862213b95e5815776d558facaa6d"
+        "publishedFilesVerifiedAt": "2026-11-03T16:39:44Z",
+        "captureRecordPath": "arcade/capture-evidence/review-20261103-record.json",
+        "captureRecordSha256": "191755d9a677cf083d786c973746ead92a8e40be24ca00939885bdb5282233a0"
       }
     }
   ]
