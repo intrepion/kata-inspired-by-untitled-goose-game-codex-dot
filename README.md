@@ -1,5 +1,7 @@
 # Puddle Trouble
 
+[Kata Arcade](https://intrepion.github.io/)
+
 An original little real-time orchard sandbox about a mischievous goose and a caretaker trying to get on with her work. Inspired by the playful stealth and reactive world of *Untitled Goose Game*, independently made with original code and drawn artwork; it is not affiliated with House House or Panic.
 
 [Play online](https://intrepion.github.io/kata-inspired-by-untitled-goose-game-codex-dot/) (the published version may differ from local changes).
