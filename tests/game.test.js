@@ -98,3 +98,9 @@ assert.equal(game.interact(s),'tap');assert.equal(s.tap.on,false);tick(s,.05);as
 s=game.create();s.goose.x=s.items.ribbon.x;s.goose.y=s.items.ribbon.y;game.interact(s);s.goose.x=s.tap.x;s.goose.y=s.tap.y;s.farmer.x=1;s.farmer.y=1;assert.equal(game.interact(s),'tie');assert.equal(s.farmer.state,'tap');assert.equal(s.items.ribbon.tied,true);
 s.farmer.x=7;s.farmer.y=2;s.goose.x=7;s.goose.y=2;game.honk(s);assert.equal(s.farmer.state,'investigate');s.goose.x=1;s.goose.y=1;tick(s,8);assert.equal(s.tap.on,false);assert.equal(s.items.ribbon.tied,false);tick(s,7);assert.ok(game.distance(s.items.ribbon,s.items.ribbon.home)<.1);
 console.log('Immediate tap response, running speed, tap priority and interruption recovery passed');
+
+// The action label and the action must agree when objects overlap or are being returned.
+s=game.create();s.goose.x=4;s.goose.y=4;s.items.basket.x=4.8;s.items.basket.y=4;s.items.pear.x=4.2;s.items.pear.y=4;
+assert.equal(game.hint(s),'Pick up pear');assert.equal(game.interact(s),'pick');assert.equal(s.goose.carrying,'pear');
+s=game.create();s.goose.x=4;s.goose.y=4;s.items.basket.x=4.2;s.items.basket.y=4;s.items.pear.x=4.5;s.items.pear.y=4;s.farmer.state='return';s.farmer.target='basket';
+assert.equal(game.hint(s),'Pick up pear');assert.equal(game.interact(s),'pick');assert.equal(s.goose.carrying,'pear');

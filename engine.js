@@ -11,6 +11,7 @@
   function say(s,text){s.message=text;s.messageTime=3}
   function near(a,b,d){return distance(a,b)<d}
   function attendTap(s){interrupt(s);const f=s.farmer;f.state='tap';f.target=s.tap;f.exposure=0;}
+  function nearestPickup(s){const g=s.goose;return Object.values(s.items).filter(i=>!i.carried&&!i.tied&&!i.heldByFarmer&&!(i.id==='hat'&&s.farmer.wearingHat)&&!(s.farmer.state==='return'&&s.farmer.target===i.id)&&near(g,i,1)).sort((a,b)=>distance(g,a)-distance(g,b))[0];}
   function interact(s){const g=s.goose,r=s.items.ribbon;
     if(near(g,s.tap,1)){
       if(g.carrying==='ribbon'){g.carrying=null;r.carried=false;r.tied=true;r.x=s.tap.x;r.y=s.tap.y;s.tap.on=true;s.goals.tap=true;attendTap(s);say(s,'The ribbon is tied to the running tap! The caretaker is rushing over.');return 'tie'}
@@ -19,7 +20,7 @@
       s.tap.on=false;say(s,'The tap is off.');return 'tap';
     }
     if(g.carrying){const item=s.items[g.carrying];item.carried=false;item.x=clamp(g.x+g.dx*.45,.4,9.6);item.y=clamp(g.y+g.dy*.45,.4,9.6);g.carrying=null;say(s,`Dropped the ${item.id}.`);check(s);return 'drop'}
-    const candidates=Object.values(s.items).filter(i=>!i.carried&&!i.tied&&!i.heldByFarmer&&!(i.id==='hat'&&s.farmer.wearingHat)&&!(s.farmer.state==='return'&&s.farmer.target===i.id)&&near(g,i,1));candidates.sort((a,b)=>distance(g,a)-distance(g,b));if(candidates.length){const item=candidates[0];item.carried=true;g.carrying=item.id;say(s,`Picked up the ${item.id}.`);return 'pick'}say(s,'Get closer to an object or the tap.');return 'none'}
+    const item=nearestPickup(s);if(item){item.carried=true;g.carrying=item.id;say(s,`Picked up the ${item.id}.`);return 'pick'}say(s,'Get closer to an object or the tap.');return 'none'}
   function interrupt(s){for(const item of Object.values(s.items))if(item.heldByFarmer){item.heldByFarmer=false;item.x=s.farmer.x;item.y=s.farmer.y;}}
   function honk(s){if(s.honkCooldown>0)return false;s.honkCooldown=.8;say(s,'HONK!');const f=s.farmer;if(near(s.goose,f,3.5)){s.goals.honk=true;interrupt(s);const knocked=f.wearingHat;if(knocked){f.wearingHat=false;const h=s.items.hat;h.x=clamp(f.x+f.dx*.55,.4,9.6);h.y=clamp(f.y+f.dy*.55,.4,9.6);h.carried=false;}f.state='investigate';f.target={x:s.goose.x,y:s.goose.y};f.notice=2.8;say(s,knocked?'HONK! The caretaker dropped her hat!':'HONK! The caretaker heard you.')}return true}
   function segmentHits(a,b,r,pad=0){
@@ -58,7 +59,7 @@
     else if(f.state==='untie'){if(!ribbon.tied){f.state='tap';}else if((f.timer-=dt)<=0){ribbon.tied=false;ribbon.heldByFarmer=true;f.state='turnoff';f.timer=.6;say(s,'The ribbon is untied. The caretaker is turning off the tap.');}}
     else if(f.state==='turnoff'){ribbon.x=f.x;ribbon.y=f.y;if((f.timer-=dt)<=0){s.tap.on=false;f.state='return';f.target='ribbon';say(s,'The caretaker turned off the tap and is returning the ribbon.');}}
     s.hidden=!visible(f,g);s.inSight=canSee(f,g);check(s)}
-  function hint(s){const g=s.goose;if(near(g,s.tap,1)){if(g.carrying==='ribbon')return 'Tie ribbon & turn tap on';if(!s.tap.on)return 'Turn tap on';if(!g.carrying&&s.items.ribbon.tied)return 'Untie ribbon';return 'Turn tap off';}if(g.carrying)return `Drop ${g.carrying}`;let i=Object.values(s.items).find(i=>!i.carried&&!i.tied&&!i.heldByFarmer&&!(i.id==='hat'&&s.farmer.wearingHat)&&near(g,i,1));return i?`Pick up ${i.id}`:'Pick up / use'}
+  function hint(s){const g=s.goose;if(near(g,s.tap,1)){if(g.carrying==='ribbon')return 'Tie ribbon & turn tap on';if(!s.tap.on)return 'Turn tap on';if(!g.carrying&&s.items.ribbon.tied)return 'Untie ribbon';return 'Turn tap off';}if(g.carrying)return `Drop ${g.carrying}`;let i=nearestPickup(s);return i?`Pick up ${i.id}`:'Pick up / use'}
   function facing(f){const x=f.dx||0,y=f.dy||0;if(!x&&!y)return 'south';const names=['east','southeast','south','southwest','west','northwest','north','northeast'];return names[(Math.round(Math.atan2(y,x)/(Math.PI/4))+8)%8]}
   const api={create,update,interact,honk,hint,distance,cover,visible,canSee,visionPolygon,VISION,TAP_RUN_SPEED,nextWaypoint,facing};if(typeof module!=='undefined')module.exports=api;else root.Orchard=api;
 })(globalThis);
